@@ -9,15 +9,21 @@ type Date struct {
 }
 
 // TODO
-// Returns the next date
+// Returns a pointer to the next date
 func (d *Date) Next() *Date {
 	return d
 }
 
 // TODO
-// Returns the previous date
+// Returns a pointer to the previous date
 func (d *Date) Previous() *Date {
 	return d
+}
+
+// TODO
+// Returns the date in iso format
+func (d *Date) ToIso() string {
+	return ""
 }
 
 // Returns an error if the date is invalid
@@ -86,20 +92,15 @@ func BuildDate(day, month uint, year uint32) (*Date, error) {
 func BuildDateFromIso(dateIso string) (*Date, error) {
 	var day, month uint
 	var year uint32
-	_, err := fmt.Sscanf(dateIso, "%d-%d-%d", day, month, year)
+	_, err := fmt.Sscanf(dateIso, "%d-%d-%d", &year, &month, &day)
 
 	if err != nil {
 		return nil, err
 	}
-	err = ValidateDate(day, month, year)
+
+	d, err := BuildDate(day, month, year)
 	if err != nil {
 		return nil, err
-	}
-
-	d := &Date{
-		day:   day,
-		month: month,
-		year:  year,
 	}
 	return d, nil
 }

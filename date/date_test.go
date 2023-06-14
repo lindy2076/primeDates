@@ -50,3 +50,75 @@ func TestValidateDate(t *testing.T) {
 		})
 	}
 }
+
+func TestBuildDate(t *testing.T) {
+	var data = []struct {
+		name   string
+		input  [3]int
+		err    bool
+		errMsg string
+	}{
+		{"17-02-2000", [3]int{17, 2, 2000}, false, ""},
+		{"31-02-2000", [3]int{31, 2, 2000}, true, "There are maximum 29 days in February"},
+	}
+
+	for _, tt := range data {
+		t.Run(tt.name, func(t *testing.T) {
+			res, err := BuildDate(uint(tt.input[0]), uint(tt.input[1]), uint32(tt.input[2]))
+			if err != nil && !tt.err {
+				t.Errorf("BuildDate %d, %s", tt.input, err)
+			}
+			if err == nil && tt.err {
+				t.Errorf("BuildDate %d; expected %s, got nil", tt.input, err)
+			}
+			if err == nil {
+				if fmt.Sprintf("%T", res) != "*date.Date" {
+					t.Errorf("BuildDate returned type is %T, not *Date", res)
+				}
+				if res.day != uint(tt.input[0]) {
+					t.Errorf("BuildDate day %d, expected %d", res.day, tt.input[0])
+				}
+				if res.month != uint(tt.input[1]) {
+					t.Errorf("BuildDate month %d, expected %d", res.day, tt.input[0])
+				}
+				if res.year != uint32(tt.input[2]) {
+					t.Errorf("BuildDate year %d, expected %d", res.day, tt.input[0])
+				}
+			}
+		})
+	}
+}
+
+func TestBuildDateFromIso(t *testing.T) {
+	var data = []struct {
+		name   string
+		input  string
+		err    bool
+		errMsg string
+	}{
+		{"17-02-2000", "2000-02-17", false, ""},
+		{"31-02-2000", "2000-02-31", true, "There are maximum 29 days in February"},
+		{"31-13-2000", "2000-13-31", true, "Month 13 is not possible"},
+	}
+
+	for _, tt := range data {
+		t.Run(tt.name, func(t *testing.T) {
+			res, err := BuildDateFromIso(tt.input)
+			if err != nil && !tt.err {
+				t.Errorf("BuildDateFromIso %s, %s", tt.input, err)
+			}
+			if err == nil && tt.err {
+				t.Errorf("BuildDateFromIso %s; expected %s, got nil", tt.input, err)
+			}
+			if err == nil {
+				if fmt.Sprintf("%T", res) != "*date.Date" {
+					t.Errorf("BuildDateFromIso returned type is %T, not *Date", res)
+				}
+				formattedResult := fmt.Sprintf("%04d-%02d-%02d", res.year, res.month, res.day)
+				if formattedResult != tt.input {
+					t.Errorf("BuildDateFromIso returned %s, not %s", formattedResult, tt.input)
+				}
+			}
+		})
+	}
+}
