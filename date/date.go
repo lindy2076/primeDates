@@ -23,7 +23,7 @@ func (d *Date) Previous() *Date {
 // TODO
 // Returns the date in iso format
 func (d *Date) ToIso() string {
-	return ""
+	return fmt.Sprintf("%04d-%02d-%02d", d.year, d.month, d.day)
 }
 
 // Returns an error if the date is invalid

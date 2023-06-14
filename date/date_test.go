@@ -122,3 +122,25 @@ func TestBuildDateFromIso(t *testing.T) {
 		})
 	}
 }
+
+func TestToIso(t *testing.T) {
+	var data = []struct {
+		name     string
+		input    *Date
+		expected string
+	}{
+		{"17-02-2000", &Date{17, 2, 2000}, "2000-02-17"},
+		{"01-02-2000", &Date{1, 2, 2000}, "2000-02-01"},
+		{"01-12-2000", &Date{1, 12, 2000}, "2000-12-01"},
+		{"01-12-0999", &Date{1, 12, 999}, "0999-12-01"},
+	}
+
+	for _, tt := range data {
+		t.Run(tt.name, func(t *testing.T) {
+			res := tt.input.ToIso()
+			if res != tt.expected {
+				t.Errorf("ToIso got %s, expected %s", res, tt.expected)
+			}
+		})
+	}
+}
