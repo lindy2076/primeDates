@@ -21,7 +21,7 @@ func (d *Date) Previous() *Date {
 }
 
 // TODO
-// Checks if the date is valid
+// Returns an error if the date is invalid
 func ValidateDate(day, month uint, year uint32) error {
 	if month > 12 || month < 1 {
 		return fmt.Errorf("Month %d is not possible", month)
