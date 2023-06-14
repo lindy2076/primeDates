@@ -8,6 +8,21 @@ type Date struct {
 	year  uint32
 }
 
+// Get a day from Date object
+func (d *Date) Day() uint {
+	return d.day
+}
+
+// Get a month from Date object
+func (d *Date) Month() uint {
+	return d.month
+}
+
+// Get a year from Date object
+func (d *Date) Year() uint32 {
+	return d.year
+}
+
 // TODO
 // Returns a pointer to the next date
 func (d *Date) Next() *Date {
@@ -20,7 +35,6 @@ func (d *Date) Previous() *Date {
 	return d
 }
 
-// TODO
 // Returns the date in iso format
 func (d *Date) ToIso() string {
 	return fmt.Sprintf("%04d-%02d-%02d", d.year, d.month, d.day)
@@ -57,6 +71,7 @@ func ValidateDate(day, month uint, year uint32) error {
 	return nil
 }
 
+// Checks if the year is leap year
 func IsYearLeap(year uint32) bool {
 	if year == 0 {
 		return false
