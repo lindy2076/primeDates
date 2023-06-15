@@ -1,6 +1,9 @@
 package date
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Date struct {
 	day   uint
@@ -33,6 +36,11 @@ func (d *Date) Next() *Date {
 // Returns a pointer to the previous date
 func (d *Date) Previous() *Date {
 	return d
+}
+
+// Checks if the date's year is a leap year
+func (d *Date) IsYearLeap() bool {
+	return IsYearLeap(d.year)
 }
 
 // Returns the date in iso format
@@ -118,4 +126,26 @@ func BuildDateFromIso(dateIso string) (*Date, error) {
 		return nil, err
 	}
 	return d, nil
+}
+
+func MonthToNumber(month string) (uint, error) {
+	var monthMap = map[string]uint{
+		"january":   1,
+		"february":  2,
+		"march":     3,
+		"april":     4,
+		"may":       5,
+		"june":      6,
+		"july":      7,
+		"august":    8,
+		"september": 9,
+		"october":   10,
+		"november":  11,
+		"december":  12,
+	}
+	num, exists := monthMap[strings.ToLower(month)]
+	if !exists {
+		return 0, fmt.Errorf("There is no %s month", month)
+	}
+	return num, nil
 }
