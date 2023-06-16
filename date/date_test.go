@@ -144,3 +144,67 @@ func TestToIso(t *testing.T) {
 		})
 	}
 }
+
+func TestNumberToMonth(t *testing.T) {
+	var data = []struct {
+		name     string
+		input    uint
+		err      bool
+		expected string
+	}{
+		{"0", 0, true, ""},
+		{"1", 1, false, "january"},
+		{"2", 2, false, "february"},
+		{"3", 3, false, "march"},
+		{"4", 4, false, "april"},
+		{"5", 5, false, "may"},
+		{"12", 12, false, "december"},
+		{"13", 13, true, ""},
+	}
+
+	for _, tt := range data {
+		t.Run(tt.name, func(t *testing.T) {
+			res, err := NumberToMonth(tt.input)
+			if err != nil {
+				if !tt.err {
+					t.Errorf("NumberToMonth returned error %s", err)
+				}
+			} else {
+				if res != tt.expected {
+					t.Errorf("NumberToMonth got %s, expected %s", res, tt.expected)
+				}
+			}
+		})
+	}
+}
+
+func TestMonthToNumber(t *testing.T) {
+	var data = []struct {
+		name     string
+		input    string
+		err      bool
+		expected uint
+	}{
+		{"randomstr", "qwersfa", true, 0},
+		{"jan", "january", false, 1},
+		{"dec", "december", false, 12},
+		{"none", "", true, 0},
+		{"jan2", "JANUARY", false, 1},
+		{"jan3", "January", false, 1},
+	}
+
+	for _, tt := range data {
+		t.Run(tt.name, func(t *testing.T) {
+			res, err := MonthToNumber(tt.input)
+			if err != nil {
+				if !tt.err {
+					t.Errorf("NumberToMonth returned error %s", err)
+				}
+			} else {
+				if res != tt.expected {
+					t.Errorf("NumberToMonth got %d, expected %d", res, tt.expected)
+				}
+			}
+		})
+	}
+}

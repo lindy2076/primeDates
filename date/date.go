@@ -1,6 +1,9 @@
 package date
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Date struct {
 	day   uint
@@ -33,6 +36,11 @@ func (d *Date) Next() *Date {
 // Returns a pointer to the previous date
 func (d *Date) Previous() *Date {
 	return d
+}
+
+// Checks if the date's year is a leap year
+func (d *Date) IsYearLeap() bool {
+	return IsYearLeap(d.year)
 }
 
 // Returns the date in iso format
@@ -118,4 +126,50 @@ func BuildDateFromIso(dateIso string) (*Date, error) {
 		return nil, err
 	}
 	return d, nil
+}
+
+// Convert a month name to it's number (1-indexed)
+func MonthToNumber(month string) (uint, error) {
+	var monthMap = map[string]uint{
+		"january":   1,
+		"february":  2,
+		"march":     3,
+		"april":     4,
+		"may":       5,
+		"june":      6,
+		"july":      7,
+		"august":    8,
+		"september": 9,
+		"october":   10,
+		"november":  11,
+		"december":  12,
+	}
+	num, exists := monthMap[strings.ToLower(month)]
+	if !exists {
+		return 0, fmt.Errorf("There is no %s month", month)
+	}
+	return num, nil
+}
+
+// Convert a month number (1-indexed) to name
+func NumberToMonth(month uint) (string, error) {
+	var monthMap = map[uint]string{
+		1:  "january",
+		2:  "february",
+		3:  "march",
+		4:  "april",
+		5:  "may",
+		6:  "june",
+		7:  "july",
+		8:  "august",
+		9:  "september",
+		10: "october",
+		11: "november",
+		12: "december",
+	}
+	val, exists := monthMap[month]
+	if !exists {
+		return "", fmt.Errorf("Possible values are 1-12. You passed %d", month)
+	}
+	return val, nil
 }
