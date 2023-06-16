@@ -128,6 +128,7 @@ func BuildDateFromIso(dateIso string) (*Date, error) {
 	return d, nil
 }
 
+// Convert a month name to it's number (1-indexed)
 func MonthToNumber(month string) (uint, error) {
 	var monthMap = map[string]uint{
 		"january":   1,
@@ -148,4 +149,27 @@ func MonthToNumber(month string) (uint, error) {
 		return 0, fmt.Errorf("There is no %s month", month)
 	}
 	return num, nil
+}
+
+// Convert a month number (1-indexed) to name
+func NumberToMonth(month uint) (string, error) {
+	var monthMap = map[uint]string{
+		1:  "january",
+		2:  "february",
+		3:  "march",
+		4:  "april",
+		5:  "may",
+		6:  "june",
+		7:  "july",
+		8:  "august",
+		9:  "september",
+		10: "october",
+		11: "november",
+		12: "december",
+	}
+	val, exists := monthMap[month]
+	if !exists {
+		return "", fmt.Errorf("Possible values are 1-12. You passed %d", month)
+	}
+	return val, nil
 }
