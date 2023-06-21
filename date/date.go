@@ -26,10 +26,28 @@ func (d *Date) Year() uint32 {
 	return d.year
 }
 
-// TODO
-// Returns a pointer to the next date
+// Returns a pointer to the next date if it exists, nil otherwise.
 func (d *Date) Next() *Date {
-	return d
+	day, m, y := d.day, d.month, d.year
+
+	err := ValidateDate(day+1, m, y)
+	if err == nil {
+		return &Date{day + 1, m, y}
+	}
+	err = ValidateDate(1, m+1, y)
+	if err == nil {
+		return &Date{1, m + 1, y}
+	}
+	// prevent overflow, fixme
+	if y == 4294967295 {
+		return nil
+	}
+	err = ValidateDate(1, 1, y+1)
+	if err == nil {
+		return &Date{1, 1, y + 1}
+	}
+
+	return nil
 }
 
 // TODO
