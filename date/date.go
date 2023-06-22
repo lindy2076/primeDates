@@ -58,13 +58,27 @@ func (d *Date) Previous() *Date {
 	if err == nil {
 		return &Date{day - 1, m, y}
 	}
-	err = ValidateDate(31, m-1, y)
-	if err == nil {
-		return &Date{31, m - 1, y}
-	}
-	err = ValidateDate(30, m-1, y)
-	if err == nil {
-		return &Date{30, m - 1, y}
+	if m == 3 {
+		if IsYearLeap(y) {
+			err = ValidateDate(29, 2, y)
+			if err == nil {
+				return &Date{29, 2, y}
+			}
+		} else {
+			err = ValidateDate(28, 2, y)
+			if err == nil {
+				return &Date{28, 2, y}
+			}
+		}
+	} else {
+		err = ValidateDate(31, m-1, y)
+		if err == nil {
+			return &Date{31, m - 1, y}
+		}
+		err = ValidateDate(30, m-1, y)
+		if err == nil {
+			return &Date{30, m - 1, y}
+		}
 	}
 	// prevent year 0
 	if y == 1 {

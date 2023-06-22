@@ -242,3 +242,37 @@ func TestNext(t *testing.T) {
 		})
 	}
 }
+
+func TestPrevious(t *testing.T) {
+	var data = []struct {
+		name     string
+		input    [3]uint
+		err      bool
+		expected [3]uint
+	}{
+		{"30-01-2000", [3]uint{30, 1, 2000}, false, [3]uint{29, 1, 2000}},
+		{"01-01-2000", [3]uint{1, 1, 2000}, false, [3]uint{31, 12, 1999}},
+		{"01-03-2000", [3]uint{1, 3, 2000}, false, [3]uint{29, 2, 2000}},
+		{"01-03-2001", [3]uint{1, 3, 2001}, false, [3]uint{28, 2, 2001}},
+		{"01-04-2001", [3]uint{1, 4, 2001}, false, [3]uint{31, 3, 2001}},
+		{"01-05-2000", [3]uint{1, 5, 2000}, false, [3]uint{30, 4, 2000}},
+		{"01-01-0001", [3]uint{1, 1, 1}, true, [3]uint{0, 0, 0}},
+		{"01-01-0002", [3]uint{1, 1, 2}, false, [3]uint{31, 12, 1}},
+	}
+
+	for _, tt := range data {
+		t.Run(tt.name, func(t *testing.T) {
+			d := &Date{tt.input[0], uint(tt.input[1]), uint32(tt.input[2])}
+			next := d.Previous()
+			if next == nil {
+				if !tt.err {
+					t.Errorf("Previous got nil, expected %04d-%02d-%02d",
+						tt.expected[2], tt.expected[1], tt.expected[0])
+				}
+			} else if next.day != tt.expected[0] || next.month != tt.expected[1] || next.year != uint32(tt.expected[2]) {
+				t.Errorf("Previous got %04d-%02d-%02d, expected %04d-%02d-%02d",
+					next.year, next.month, next.day, tt.expected[2], tt.expected[1], tt.expected[0])
+			}
+		})
+	}
+}
