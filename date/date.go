@@ -26,7 +26,7 @@ func (d *Date) Year() uint32 {
 	return d.year
 }
 
-// Returns a pointer to the next date if it exists, nil otherwise.
+// Returns a pointer to the next date if it exists, nil otherwise
 func (d *Date) Next() *Date {
 	day, m, y := d.day, d.month, d.year
 
@@ -38,7 +38,7 @@ func (d *Date) Next() *Date {
 	if err == nil {
 		return &Date{1, m + 1, y}
 	}
-	// prevent overflow, fixme
+	// prevent year overflow, fixme
 	if y == 4294967295 {
 		return nil
 	}
@@ -50,10 +50,32 @@ func (d *Date) Next() *Date {
 	return nil
 }
 
-// TODO
-// Returns a pointer to the previous date
+// Returns a pointer to the previous date if it exists, nil otherwise
 func (d *Date) Previous() *Date {
-	return d
+	day, m, y := d.day, d.month, d.year
+
+	err := ValidateDate(day-1, m, y)
+	if err == nil {
+		return &Date{day - 1, m, y}
+	}
+	err = ValidateDate(31, m-1, y)
+	if err == nil {
+		return &Date{31, m - 1, y}
+	}
+	err = ValidateDate(30, m-1, y)
+	if err == nil {
+		return &Date{30, m - 1, y}
+	}
+	// prevent year 0
+	if y == 1 {
+		return nil
+	}
+	err = ValidateDate(31, 12, y-1)
+	if err == nil {
+		return &Date{31, 12, y - 1}
+	}
+
+	return nil
 }
 
 // Checks if the date's year is a leap year
