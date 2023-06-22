@@ -1,12 +1,22 @@
 # primeDates
-a small console app to play with dates and primality of numbers written in go
+
 
 ## что это
-Это небольшое консольное приложение, определяющее **простые даты** и написанное на Go.
+Это небольшое консольное приложение, определяющее **простые даты**.
 
 **Простая дата** - дата, в которой все числа простые. 
 
 Например, 3 марта 2003 года - простая дата, т.к. 3, 3, 2003 - простые числа. 
+
+## Запуск
+запустить бинарник `primeDates` из релиза, или собрать самому: `go build .` и затем запустить получившийся бинарник.
+
+## Использование
+Можно передать дату в качестве аргумента при запуске бинарника `./primeDates 2003-01-01` или ввести непосредственно после запуска.
+
+Выведется простая дата или нет.
+
+Если год из переданной даты простой, то выведутся все простые даты из этого года.
 
 Тут два пакета: date и primes.
 
@@ -14,19 +24,21 @@ a small console app to play with dates and primality of numbers written in go
 
 #### Структуры:
 
-`Date`
+`date.Date`
 
 поля:
 - day `uint`
 - month `uint`
 - year `uint32`
 
-методы:
+методы `date.Date`:
 - `(*Date).Day() uint` - возвращает поле day
 - `(*Date).Month() uint` - возвращает поле month
 - `(*Date).Year() uint32` - возвращает поле year
 - `(*Date).IsYearLeap() bool` - проверяет, високосный год (Date.year) или нет
 - `(*Date).ToIso() string` - переводит дату в iso формат (yyyy-mm-dd)
+- `(*Date).Next() *Date` - возвращает следующий день
+- `(*Date).Previous() *Date` - возвращает предыдущий день
 
 #### Публичные методы:
 
@@ -47,8 +59,5 @@ a small console app to play with dates and primality of numbers written in go
 - `PrimalityString(num uint32) string` - возвращает строку вида `*num* is prime`/`*num* is not prime`. 
 
 ## todo
-Date.Next()
 
-Date.Previous()
-
-main.go
+idk mb eng readme
